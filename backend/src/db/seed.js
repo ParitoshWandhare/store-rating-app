@@ -34,7 +34,7 @@ async function seed() {
       RETURNING id
     `, [
       'Green Valley Grocery Owner',
-      'owner1@greenvalley.com',
+      'owner1@example.com',
       ownerHash,
       '456 Market Avenue, Commerce City, CC 10001'
     ]);
@@ -183,7 +183,7 @@ async function seed() {
     console.log('✅ Seed data inserted successfully.');
     console.log('\n📋 Demo Credentials:');
     console.log('  Admin:       admin@storerating.com    / Admin@123');
-    console.log('  Store Owner: owner1@greenvalley.com   / Owner@123');
+    console.log('  Store Owner: owner1@example.com   / Owner@123');
     console.log('  Normal User: alice@example.com        / User@1234');
   } catch (err) {
     console.error('❌ Seed failed:', err.message);

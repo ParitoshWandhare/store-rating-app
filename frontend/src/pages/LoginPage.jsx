@@ -109,7 +109,7 @@ export default function LoginPage() {
           </div>
           {[
             { role: 'Admin',  email: 'admin@storerating.com',  pass: 'Admin@123'  },
-            { role: 'Owner',  email: 'owner1@greenvalley.com', pass: 'Owner@123'  },
+            { role: 'Owner',  email: 'owner1@example.com', pass: 'Owner@123'  },
             { role: 'User',   email: 'alice@example.com',      pass: 'User@1234'  },
           ].map(({ role, email, pass }) => (
             <div
