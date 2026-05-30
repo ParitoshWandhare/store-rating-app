@@ -1,49 +1,74 @@
-# RateStore — Full-Stack Store Rating Platform
+# RateStore - Store Rating Platform
 
-A role-based web application where users can sign up, browse stores, and submit ratings (1–5).  
-Three roles: **System Administrator**, **Normal User**, and **Store Owner**.
+A full-stack role-based web application where users can browse stores, submit ratings, and manage store-related information.
+
+Built using **React.js**, **Node.js**, **Express.js**, and **PostgreSQL**.
+
+---
+
+## Features
+
+### System Administrator
+
+* Dashboard with platform statistics
+* Manage users and stores
+* Create new users (Admin, Store Owner, Normal User)
+* Create and assign stores to owners
+* Search, sort, and filter users and stores
+
+### Normal User
+
+* Register and login
+* Browse all stores
+* Search stores by name or address
+* Submit ratings (1–5)
+* Update or delete ratings
+* View personal ratings
+
+### Store Owner
+
+* Login to owner dashboard
+* View assigned stores
+* Check average ratings
+* Monitor user feedback
 
 ---
 
 ## Tech Stack
 
-| Layer     | Technology                        |
-|-----------|-----------------------------------|
-| Backend   | Node.js + Express.js              |
-| Database  | PostgreSQL 14+                    |
-| Frontend  | React 18 + React Router v6        |
-| Auth      | JWT (jsonwebtoken + bcryptjs)      |
-| Styling   | Plain CSS with design tokens      |
+| Layer          | Technology           |
+| -------------- | -------------------- |
+| Frontend       | React 18             |
+| Routing        | React Router v6      |
+| Backend        | Node.js + Express.js |
+| Database       | PostgreSQL 14+       |
+| Authentication | JWT + bcryptjs       |
+| Styling        | Plain CSS            |
 
 ---
 
 ## Project Structure
 
-```
+```text
 store-rating-app/
 ├── backend/
 │   ├── src/
-│   │   ├── controllers/      # authController, userController, storeController, ratingController
-│   │   ├── db/               # index.js (pool), migrate.js, seed.js
-│   │   ├── middleware/        # auth.js, errorHandler.js, validate.js
-│   │   ├── routes/           # auth.js, users.js, stores.js, ratings.js
-│   │   ├── validators/       # shared.js
+│   │   ├── controllers/
+│   │   ├── db/
+│   │   ├── middleware/
+│   │   ├── routes/
+│   │   ├── validators/
 │   │   └── server.js
-│   ├── .env.example
 │   └── package.json
+│
 └── frontend/
     ├── public/
-    │   └── index.html
     ├── src/
     │   ├── components/
-    │   │   └── common/       # index.jsx, Sidebar.jsx, Layout.jsx
-    │   ├── context/          # AuthContext.jsx
+    │   ├── context/
     │   ├── pages/
-    │   │   ├── admin/        # AdminDashboard, AdminUsers, AdminStores
-    │   │   ├── user/         # UserStores, UserRatings
-    │   │   └── owner/        # OwnerDashboard
-    │   ├── services/         # api.js (axios instance)
-    │   ├── styles/           # globals.css
+    │   ├── services/
+    │   ├── styles/
     │   ├── App.jsx
     │   └── index.js
     └── package.json
@@ -51,210 +76,306 @@ store-rating-app/
 
 ---
 
+# Local Setup (Windows)
+
 ## Prerequisites
 
-- Node.js 18+
-- PostgreSQL 14+
-- npm 9+
+Install:
+
+* Node.js 18+
+* PostgreSQL 14+
+* npm 9+
+
+Verify installation:
+
+```powershell
+node -v
+npm -v
+psql --version
+```
 
 ---
 
-## 1. PostgreSQL Setup
+# 🗄 PostgreSQL Setup
 
-### macOS (Homebrew)
-```bash
-brew install postgresql@14
-brew services start postgresql@14
-psql postgres
+Open PostgreSQL Shell:
+
+```powershell
+psql -U postgres -h localhost
 ```
 
-### Ubuntu / Debian
-```bash
-sudo apt update && sudo apt install postgresql postgresql-contrib
-sudo systemctl start postgresql
-sudo -u postgres psql
-```
+Run:
 
-### Inside psql
 ```sql
 CREATE DATABASE store_rating_db;
-CREATE USER store_user WITH ENCRYPTED PASSWORD 'yourpassword';
-GRANT ALL PRIVILEGES ON DATABASE store_rating_db TO store_user;
+
+CREATE USER store_user
+WITH ENCRYPTED PASSWORD 'yourpassword';
+
+GRANT ALL PRIVILEGES
+ON DATABASE store_rating_db
+TO store_user;
+```
+
+Exit:
+
+```sql
 \q
 ```
 
 ---
 
-## 2. Backend Setup
+# Backend Setup
 
-```bash
-cd store-rating-app/backend
+Navigate to backend folder:
 
-# Install dependencies
+```powershell
+cd backend
 npm install
-
 ```
 
-Edit `.env`:
-```
+Create `.env` file:
+
+```env
 PORT=5000
+
 DB_HOST=localhost
 DB_PORT=5432
 DB_NAME=store_rating_db
 DB_USER=store_user
 DB_PASSWORD=yourpassword
+
 JWT_SECRET=change_this_to_a_long_random_string_min_32_chars
 JWT_EXPIRES_IN=24h
+
 FRONTEND_URL=http://localhost:3000
 ```
 
-```bash
-# Run migrations (creates all tables)
+Run migrations:
+
+```powershell
 npm run db:migrate
+```
 
-# Seed demo data
+Seed demo data:
+
+```powershell
 npm run db:seed
+```
 
-# Start development server
+Start backend server:
+
+```powershell
 npm run dev
-# → Server running on http://localhost:5000
+```
+
+Server:
+
+```text
+http://localhost:5000
 ```
 
 ---
 
-## 3. Frontend Setup
+# Frontend Setup
 
-```bash
-cd store-rating-app/frontend
+Open another terminal:
 
+```powershell
+cd frontend
 npm install
+```
 
-```
-Edit `.env`:
-```
+Create `.env` file:
+
+```env
 REACT_APP_API_URL=http://localhost:5000/api
 ```
 
-```bash
+Start React app:
 
+```powershell
 npm start
-# → React app on http://localhost:3000
+```
+
+Frontend:
+
+```text
+http://localhost:3000
 ```
 
 ---
 
-## 4. Demo Login Credentials
+# Demo Credentials
 
-| Role         | Email                          | Password    |
-|--------------|--------------------------------|-------------|
-| Admin        | admin@storerating.com          | Admin@123   |
-| Store Owner  | owner1@example.com             | Owner@123   |
-| Store Owner  | owner2@example.com             | Owner@123   |
-| Normal User  | alice@example.com              | User@1234   |
-| Normal User  | bob@example.com                | User@1234   |
+## Admin
 
----
-
-## 5. API Endpoints
-
-### Base URL: `http://localhost:5000/api`
-
----
-
-### Auth
-
-| Method | Endpoint         | Auth     | Description                          |
-|--------|------------------|----------|--------------------------------------|
-| POST   | /auth/register   | No       | Register new normal user             |
-| POST   | /auth/login      | No       | Login (all roles)                    |
-| PATCH  | /auth/password   | Required | Update own password                  |
-| GET    | /auth/me         | Required | Get current user info                |
-
----
-
-### Users (Admin only)
-
-| Method | Endpoint       | Description                          |
-|--------|----------------|--------------------------------------|
-| GET    | /users/stats   | Dashboard stats (counts)             |
-| GET    | /users         | List users (filter, sort, paginate)  |
-| GET    | /users/:id     | Get single user details              |
-| POST   | /users         | Create user (any role)               |
-
-**Query params for GET /users:**
-- `search` — string, matches name/email/address
-- `role` — `admin` | `user` | `owner`
-- `sortBy` — `name` | `email` | `address` | `role` | `created_at`
-- `sortDir` — `asc` | `desc`
-- `page`, `limit`
-
----
-
-### Stores
-
-| Method | Endpoint                  | Auth              | Description                 |
-|--------|---------------------------|-------------------|-----------------------------|
-| GET    | /stores                   | admin, user       | List stores (search, sort)  |
-| GET    | /stores/:id               | admin, user       | Get single store            |
-| POST   | /stores                   | admin             | Create store                |
-| GET    | /stores/owner/dashboard   | owner             | Owner dashboard             |
-
-**Query params for GET /stores:**
-- `search` — name or address
-- `sortBy` — `name` | `email` | `address` | `avg_rating`
-- `sortDir`, `page`, `limit`
-
----
-
-### Ratings (Normal users only)
-
-| Method | Endpoint             | Description                     |
-|--------|----------------------|---------------------------------|
-| POST   | /ratings             | Submit rating for a store       |
-| PUT    | /ratings/:storeId    | Update existing rating          |
-| DELETE | /ratings/:storeId    | Remove a rating                 |
-
----
-
-## 6. Validation Rules Summary
-
-| Field    | Rule                                                          |
-|----------|---------------------------------------------------------------|
-| name     | Min 20 chars, max 60 chars                                    |
-| email    | Valid email format                                            |
-| password | 8–16 chars, ≥1 uppercase, ≥1 special character               |
-| address  | Optional, max 400 chars                                       |
-| score    | Integer 1–5                                                   |
-
----
-
-## 7. Security Features
-
-- Passwords hashed with **bcrypt** (cost factor 12)
-- JWT tokens with configurable expiry
-- **Helmet.js** security headers
-- **CORS** restricted to frontend origin
-- **Rate limiting**: 30 req/15 min on auth routes, 200 req/15 min globally
-- Role-based authorization middleware on every protected route
-- SQL injection protected via parameterized queries (pg driver)
-- Input validation via **express-validator** on all write endpoints
-
----
-
-## 8. Database Schema Overview
-
+```text
+Email: admin@storerating.com
+Password: Admin@123
 ```
-users           — id, name, email, password_hash, address, role (enum), created_at, updated_at
-stores          — id, name, email, address, owner_id (→ users), created_at, updated_at
-ratings         — id, user_id (→ users), store_id (→ stores), score (1-5), created_at, updated_at
-                  UNIQUE(user_id, store_id) — one rating per user per store
+
+## Store Owner
+
+```text
+Email: owner1@example.com
+Password: Owner@123
+```
+
+```text
+Email: owner2@example.com
+Password: Owner@123
+```
+
+## Normal User
+
+```text
+Email: alice@example.com
+Password: User@1234
+```
+
+```text
+Email: bob@example.com
+Password: User@1234
 ```
 
 ---
 
-## 9. Author
+# API Endpoints
 
-**Paritosh Wandhare**  
-Final Year IT Student | Full Stack Developer  
-🔗 [LinkedIn](https://www.linkedin.com/in/paritosh-wandhare-959615290/)
-🔗 [Portfolio](https://paritosh-wandhare.vercel.app/)
+Base URL:
+
+```text
+http://localhost:5000/api
+```
+
+---
+
+## Authentication
+
+| Method | Endpoint       |
+| ------ | -------------- |
+| POST   | /auth/register |
+| POST   | /auth/login    |
+| PATCH  | /auth/password |
+| GET    | /auth/me       |
+
+---
+
+## Users (Admin Only)
+
+| Method | Endpoint     |
+| ------ | ------------ |
+| GET    | /users/stats |
+| GET    | /users       |
+| GET    | /users/:id   |
+| POST   | /users       |
+
+---
+
+## Stores
+
+| Method | Endpoint                |
+| ------ | ----------------------- |
+| GET    | /stores                 |
+| GET    | /stores/:id             |
+| POST   | /stores                 |
+| GET    | /stores/owner/dashboard |
+
+---
+
+## Ratings
+
+| Method | Endpoint          |
+| ------ | ----------------- |
+| POST   | /ratings          |
+| PUT    | /ratings/:storeId |
+| DELETE | /ratings/:storeId |
+
+---
+
+# Validation Rules
+
+| Field        | Rule                                         |
+| ------------ | -------------------------------------------- |
+| Name         | 20–60 characters                             |
+| Email        | Valid email format                           |
+| Password     | 8–16 chars, 1 uppercase, 1 special character |
+| Address      | Optional, max 400 chars                      |
+| Rating Score | Integer between 1 and 5                      |
+
+---
+
+# Security Features
+
+* JWT Authentication
+* Password Hashing (bcrypt)
+* Role-Based Authorization
+* Helmet Security Headers
+* CORS Protection
+* Express Rate Limiting
+* PostgreSQL Parameterized Queries
+* Input Validation using express-validator
+
+---
+
+# Database Schema
+
+## Users
+
+```sql
+id
+name
+email
+password_hash
+address
+role
+created_at
+updated_at
+```
+
+## Stores
+
+```sql
+id
+name
+email
+address
+owner_id
+created_at
+updated_at
+```
+
+## Ratings
+
+```sql
+id
+user_id
+store_id
+score
+created_at
+updated_at
+```
+
+Constraint:
+
+```sql
+UNIQUE(user_id, store_id)
+```
+
+One user can rate a store only once.
+
+---
+
+# Author
+
+### Paritosh Wandhare
+
+Final Year Information Technology Student
+
+**Portfolio:** https://paritosh-wandhare.vercel.app/
+
+**LinkedIn:** https://www.linkedin.com/in/paritosh-wandhare-959615290/
+
+**GitHub:** https://github.com/paritoshwandhare
+
